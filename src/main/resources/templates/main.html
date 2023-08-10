@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create your own shop</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script type="text/javascript">
+        function addShop() {
+            const shopName = document.getElementById('name').value;
+            const shopPublic = document.getElementById('public').checked;
+            const body = {
+                shopName: shopName,
+                shopPublic: shopPublic
+            }
+            fetch("http://localhost:4000/shops/add", {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+                .then((response) => {
+                    if (response.status != 200) {
+                        document.getElementById("name_validation").style.setProperty('visibility', 'visible');
+                        return;
+                    }
+                    else {
+                        console.log(response.json());
+                        document.getElementById("name_validation").style.setProperty('visibility', 'hidden');
+                        alert("Shop is added");
+                        location.reload();
+                    }
+                })
+                .catch(() => console.log("Something went wrong"));
+        }
+        function deleteShop() {
+            const shopId = document.getElementById('id').value;
+            if (!shopId) {
+                document.getElementById("id_validation").style.setProperty('visibility', 'visible');
+                return;
+            } else {
+            fetch("http://localhost:4000/shops/delete/" + shopId, {
+                method: "DELETE",
+            })
+                .then(() => {
+                    alert('Shop is deleted');
+                    location.reload();
+                })
+                .catch(() => console.log("Something went wrong"));
+            }
+
+        }
+    </script>
+</head>
+<body>
+<header>
+    <img src="./imgs/icon.png" width="100" height="100" alt="logo">
+    <div id="links">
+        <a href="#create_shop">Create shop</a>
+        <a href="#all_shops">All shops</a>
+        <a href="#delete_shop">Delete shop</a>
+    </div>
+</header>
+<section id="greetings">
+    <h1>Welcome to our shop constructor!</h1>
+    <div>
+        <p>Here you can test the next things:</p>
+        <ul>
+            <li>Enter a name and specify type to create a new store.</li>
+            <li>Created shops will be displayed at the list below.</li>
+            <li>You also can delete them with delete form.</li>
+        </ul>
+    </div>
+</section>
+<section style="background-color: #44317C; text-align: center">
+    <h2>The idea of our product is very simple</h2>
+    <p>Forget about selling on Avito and create your own online store!</p>
+    <h3>Stop sell like that!</h3>
+    <img src="/imgs/1.png" width="300px" height="300px" alt="1">
+    <img src="/imgs/2.png" width="300px" height="300px" alt="2">
+    <img src="/imgs/3.png" width="300px" height="300px" alt="3">
+    <img src="/imgs/4.png" width="300px" height="300px" alt="4">
+    <img src="/imgs/5.png" width="300px" height="300px" alt="5">
+    <h3>Sales can be simpler</h3>
+    <img src="/imgs/site.jpg" alt="example">
+</section>
+<section id="shops">
+    <div id="shops_div">
+        <a id="all_shops"></a>
+        <h2>Already created shops</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>public</th>
+            </tr>
+            </thead>
+            <button onclick="location.reload(); scrollIntoView()">Refresh</button>
+            <tbody id="response">
+                <script type="text/javascript">
+                    fetch("http://localhost:4000/shops/all")
+                        .then((response) => response.json())
+                        .then((json) => {
+                            for (let i = 0; i < json.length; i++) {
+                                document.getElementById("response").innerHTML +=
+                                    `<tr><td>${json[i].shopId}</td>
+                             <td>${json[i].shopName}</td>
+                             <td>${json[i].shopPublic}</td></tr>`;
+                            }
+                        });
+                </script>
+            </tbody>
+        </table>
+    </div>
+</section>
+<section style="display:flex; align-items: center; flex-direction: column">
+    <div id="create" onsubmit="addShop()">
+        <a id="create_shop"></a>
+        <div class="form">
+            <h2>Create a shop</h2>
+            <label>Name</label>
+            <input id="name" type="text" placeholder="Enter shop name">
+            <div style="display: flex; flex-direction: row">
+                <input type="checkbox" id="public">
+                <label>Public</label>
+            </div>
+            <button onclick="addShop()">Create shop</button>
+        </div>
+    </div>
+    <div class="error" id="name_validation">
+        <p>Store naming convention:</p>
+        <ul>
+            <li>Name should begin with a capital letter.</li>
+            <li>Name length should be more than 6 characters.</li>
+        </ul>
+    </div>
+</section>
+<section style="display:flex; align-items: center; flex-direction: column">
+    <div id="delete">
+        <a id="delete_shop"></a>
+        <div class="form">
+            <h2>Delete a shop</h2>
+            <label>Id</label>
+            <input type="number" id="id" placeholder="Enter shop id">
+            <button onclick="deleteShop();">Delete shop</button>
+        </div>
+    </div>
+    <div class="error" id="id_validation">
+        <p>Must be not empty</p>
+    </div>
+</section>
+<footer>
+    <p>Contact us</p>
+    <div style="display: flex; flex-direction: row">
+        <a href="https://web.telegram.org/">Telegram</a>
+        <a href="https://m.vk.com/">VK</a>
+    </div>
+</footer>
+</body>
+</html>
