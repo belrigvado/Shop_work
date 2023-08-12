@@ -21,6 +21,16 @@ dependencies {
 	implementation 'org.json:json:20230227'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.1.1'
 	testImplementation 'io.rest-assured:rest-assured:5.3.0'
+	testImplementation 'org.seleniumhq.selenium:selenium-java:4.5.0'
+	testImplementation 'org.seleniumhq.selenium:selenium-java:4.5.0'
+	testImplementation 'org.seleniumhq.selenium:selenium-http-jdk-client:4.8.1'
+	testImplementation 'org.seleniumhq.selenium:htmlunit-driver:4.5.0'
+}
+
+test {
+	filter {
+		excludeTestsMatching "com.example.shop.e2e.*"
+	}
 }
 
 tasks.named('test') {
