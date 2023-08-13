@@ -8,17 +8,6 @@
 name: Java CI with Gradle
 
 on:
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
-        type: choice
-        options:
-        - info
-        - warning
-        - debug
   push:
     branches: [ "master", "master2" ]
   pull_request:
@@ -42,10 +31,5 @@ jobs:
           allure-project-id: ${{ secrets.ALLURE_PROJECT_ID2 }}
       - name: Build with Gradle
         run: allurectl watch -- ./gradlew clean test
-      - name: Build Report
-        uses: simple-elf/allure-report-action@master
-        if: always()
-        with:
-          allure_results: build/allure-results
-          allure_history: allure_history
-          keep_reports: 20
+        env:
+          ALLURE_RESULTS: build/allure-results
