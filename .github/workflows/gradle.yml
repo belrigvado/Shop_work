@@ -12,33 +12,6 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-  workflow_dispatch:
-    inputs:
-      TEST_ENDPOINT:
-        description: "Endpoint for tests"
-        required: true
-        default: https://dev.github.com
-      TEST_BROWSER:
-        description: "Browser for tests"
-        required: true
-        default: chrome
-      ALLURE_JOB_RUN_ID:
-        description: "ALLURE_JOB_RUN_ID service parameter. Leave blank."
-        required: false
-      ALLURE_USERNAME:
-        description: "ALLURE_USERNAME service parameter. Leave blank"
-        required: false
-
-env:
-  ALLURE_ENDPOINT: https://drtgfffff.testops.cloud/
-  ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN2 }}
-  ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID2 }}
-  ALLURE_TESTPLAN_PATH: "./testplan.json"
-  ALLURE_RESULTS: "build/allure-results"
-  ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
-
-permissions:
-  contents: read
 
 jobs: 
   all-tests:
@@ -56,20 +29,5 @@ jobs:
           allure-endpoint: https://drtgfffff.testops.cloud/
           allure-token: ${{ secrets.ALLURE_TOKEN2 }}
           allure-project-id: ${{ secrets.ALLURE_PROJECT_ID2 }}
-      - name: Prepare TestPlan
-        run: allurectl job-run plan --output-file ${ALLURE_TESTPLAN_PATH}
       - name: Build with Gradle
-        run: | 
-          allurectl watch -- ./gradlew clean test
-          export $( allurectl job-run env)
-          printenv | grep TEST_
-          printenv | grep ALLURE_
-        env:
-          TEST_ENDPOINT: ${{ github.event.inputs.TEST_ENDPOINT }}
-          TEST_BROWSER: ${{ github.event.inputs.TEST_BROWSER }}
-      - name: Get ALLURE_ environments just to check
-        run: | 
-          printenv | grep ALLURE_
-      - name: Get GITHUB_ environments just to check
-        run: | 
-          printenv | grep GITHUB_
+        run: allurectl watch -- ./gradlew clean test
