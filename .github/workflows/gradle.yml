@@ -31,8 +31,8 @@ on:
 
 env:
   ALLURE_ENDPOINT: https://testing.allure.aws.qameta.in
-  ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
-  ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID }}
+  ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN2 }}
+  ALLURE_PROJECT_ID: ${{ secrets.ALLURE_PROJECT_ID2 }}
   ALLURE_TESTPLAN_PATH: "./testplan.json"
   ALLURE_RESULTS: "build/allure-results"
   ALLURE_JOB_RUN_ID: ${{ github.event.inputs.ALLURE_JOB_RUN_ID }}
@@ -70,8 +70,8 @@ jobs:
         uses: allure-framework/setup-allurectl@v1
         with:
           allure-endpoint: https://drtgfffff.testops.cloud/
-          allure-token: ${{ secrets.ALLURE_TOKEN }}
-          allure-project-id: ${{ secrets.ALLURE_PROJECT_ID }}
+          allure-token: ${{ secrets.ALLURE_TOKEN2 }}
+          allure-project-id: ${{ secrets.ALLURE_PROJECT_ID2 }}
       - name: Prepare TestPlan
         run: allurectl job-run plan --output-file ${ALLURE_TESTPLAN_PATH}
       - name: Build with Gradle
