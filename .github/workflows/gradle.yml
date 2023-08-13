@@ -20,9 +20,9 @@ on:
         - warning
         - debug
   push:
-    branches: [ "master" ]
+    branches: [ "master", "master2" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "master2" ]
 
 jobs: 
   all-tests:
